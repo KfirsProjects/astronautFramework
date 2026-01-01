@@ -47,7 +47,7 @@ class Gravity {
             }
 
             //Calculate the gravitational acceleration
-            const accelerationToEarthCenter = this.getGravityForce() / this.getMass();
+            let accelerationToEarthCenter = {x: this.getGravityForce().x / this.getMass(), y: this.getGravityForce().y / this.getMass()};
             //Update the object's velocity and position
             this.object.velocity.x += accelerationToEarthCenter.x;
             this.object.velocity.y += accelerationToEarthCenter.y;

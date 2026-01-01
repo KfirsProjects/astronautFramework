@@ -3,18 +3,15 @@
 
 
 
-
-let canvasContext = document.getElementById('myCanvas').getContext('2d');
-//Game loop in action-------
-const gameloop = new GameLoop(()=>{
-//using classes of framework
-    const physics = new Gravity();
-    let rect = new RenderShapes(
+let canvas = document.getElementById('myCanvas');
+let canvasContext = canvas.getContext('2d');
+ let rect = new RenderShapes(
         [ {x: 50, y: 50}, {x: 150, y: 100} ], //vertex for rectangle
         "rectangle", //shape type
         "#FF5733", //color
         canvasContext //assuming canvasContext is defined elsewhere
         , {x:0, y:0} //position
+        , {x:0, y:50} //velocity
     );
 
     let circle = new RenderShapes(
@@ -23,6 +20,7 @@ const gameloop = new GameLoop(()=>{
         "#33FF57", //color
         canvasContext,
         {x:300, y:0} //position
+        , {x:0, y:50} //velocity
     );
 
     let polygon = new RenderShapes(
@@ -31,9 +29,19 @@ const gameloop = new GameLoop(()=>{
         "#3357FF", //color
         canvasContext,
         {x:300, y:0} //position
+        , {x:0, y:50} //velocity
     );
+let physics = new Gravity({position:rect.getPosition(), velocity:rect.getVelocity()}, {x:0, y:4.8}, 5); //apply gravity to rectangle with mass 5
 
+const gameloop = new GameLoop(()=>{
+//using classes of framework
+//Game loop in action-------
+
+   
+    
     rect.render(); //Render the rectangle
     circle.render(); //Render the circle
     polygon.render(); //Render the polygon
-}, canvasContext).run(); 
+    physics.applayGravity(); //Apply gravity to the rectangle
+    
+},canvas, canvasContext).run(); 

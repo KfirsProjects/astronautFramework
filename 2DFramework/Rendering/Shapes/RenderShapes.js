@@ -7,13 +7,15 @@ class RenderShapes {
     _color = ""; //String representing the color e.g. "#FF0000"
     _context = null; //Rendering context (e.g., CanvasRenderingContext2D)
     _position = {x:0, y:0};
-    constructor(_vertex, _shapeType, _color, _context, _position={x:0, y:0}) {
+    _velocity = {x:0, y:0};
+    constructor(_vertex, _shapeType, _color, _context, _position={x:0, y:0}, _velocity={x:0, y:0}) {
         //Initialize the private variables with the provided parameters
         this._vertex = _vertex;
         this._shapeType = _shapeType;
         this._color = _color;
         this._context = _context;
         this._position = _position;
+        this._velocity = _velocity;
     }
 
     //I like  to set getter and setter methods for encapsulation
@@ -49,6 +51,12 @@ class RenderShapes {
     getPosition() {
         return this._position;
     }
+    setVelocity(_velocity) {
+        this._velocity = _velocity;
+    }
+    getVelocity() {
+        return this._velocity;
+    }
 //added validation to avoid runtime errors in all shape rendering methods
 
 renderRect() {
@@ -58,8 +66,8 @@ renderRect() {
         if (!ctx) throw new Error("Canvas context is missing");
         if (!Array.isArray(v) || v.length < 2) throw new Error("Rectangle requires 2 vertices");
         ctx.fillStyle = this.getColor();
-        const ox = this.getPosition().x || 0;
-        const oy = this.getPosition().y || 0;
+        const ox = this.getPosition().x || 0 || this.getPosition().x + this.getVelocity().x;
+        const oy = this.getPosition().y || 0 || this.getPosition().y + this.getVelocity().y;
         const x0 = v[0].x + ox, y0 = v[0].y + oy;
         const x1 = v[1].x + ox, y1 = v[1].y + oy;
         const x = Math.min(x0, x1);
@@ -79,8 +87,8 @@ renderCircle() {
         if (!ctx) throw new Error("Canvas context is missing");
         if (!Array.isArray(v) || v.length < 2) throw new Error("Circle requires center and radius");
         ctx.fillStyle = this.getColor();
-        const ox = this.getPosition().x || 0;
-        const oy = this.getPosition().y || 0;
+        const ox = this.getPosition().x || 0 || this.getPosition().x + this.getVelocity().x;
+        const oy = this.getPosition().y || 0 || this.getPosition().y + this.getVelocity().y;
         const centerX = (v[0].x || 0) + ox;
         const centerY = (v[0].y || 0) + oy;
 
@@ -108,8 +116,8 @@ renderPolygon() {
         if (!ctx) throw new Error("Canvas context is missing");
         if (!Array.isArray(v) || v.length < 3) throw new Error("Polygon requires at least 3 vertices");
         ctx.fillStyle = this.getColor();
-        const ox = this.getPosition().x || 0;
-        const oy = this.getPosition().y || 0;
+        const ox = this.getPosition().x || 0 || this.getPosition().x + this.getVelocity().x;
+        const oy = this.getPosition().y || 0 || this.getPosition().y + this.getVelocity().y;
 
         ctx.beginPath();
         ctx.moveTo(v[0].x + ox, v[0].y + oy);

@@ -1,8 +1,9 @@
 class GameLoop
 {
-    constructor(callback, canvasContext)
+    constructor(callback, canvas ,canvasContext)
     {
         this.callback = callback;
+        this.canvas = canvas;
         this.canvasContext = canvasContext;
     }      
 
@@ -24,6 +25,17 @@ class GameLoop
     {
         return this.canvasContext;
     }
+
+    setCanvas(canvas)
+    {
+        this.canvas = canvas;
+    }
+
+    getCanvas()
+    {
+        return this.canvas;
+    }
+
     run()
     {
         try
@@ -31,7 +43,7 @@ class GameLoop
             //Use arrow function and requestAnimationFrame for smooth looping and high perfomance---------
             const myLoop = ()=>
             {
-                this.getCanvasContext().clearRect(0, 0, this.getCanvasContext().canvas.width, this.getCanvasContext().canvas.height);
+                this.getCanvasContext().clearRect(0, 0, this.getCanvas().width, this.getCanvas().height); //Clear canvas before each frame
                 this.getCallback();
                 requestAnimationFrame(myLoop);
             };
