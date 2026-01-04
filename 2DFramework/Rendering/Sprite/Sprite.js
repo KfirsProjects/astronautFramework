@@ -4,15 +4,23 @@ class Sprite
     _vertices=[{}];
     _image=null;
     _position={x:0,y:0};
-    constructor(context, _vertices=[{}], _image="", _position={x:0,y:0})
+    constructor({_context=null, _vertices=[{}], _image="", _position={x:0,y:0}}={})//configuration pattern in javascript is more comfortable way to use classes
     {
-        this._context = context;
+        this._context = _context;
         this._vertices = _vertices;
         this._image = _image;
         this._position = _position;
     }
 
     //getters setters like I love
+    setContext(context)
+    {
+        this._context = context;
+    }
+    getContext()
+    {
+        return this._context;
+    }
     setVertices(vertices)
     {
         this._vertices = vertices;
@@ -62,11 +70,21 @@ class Sprite
     {
         try
         {
+            //------------------flag boolean for rendering sprite image------------------------
+            let isRenderSpriteImage = true; //set to true to render sprite image, false to not render sprite image
+            //------> width and height calculation from vertices
+            let width = this.calculateVertices()[1].x - this.calculateVertices()[0].x;
+            let height = this.calculateVertices()[1].y - this.calculateVertices()[0].y;
+
+
+            //Render the sprite image at the calculated position
             let img = new Image();
             img.src = this.getImage();
             img.onload = () => {
-                const ctx = this._context;
-                ctx.drawImage(img, this.getPosition().x, this.getPosition().y, this.calculateVertices()[1].x - this.calculateVertices()[0].x, this.calculateVertices()[1].y - this.calculateVertices()[0].y );
+                if (isRenderSpriteImage) {
+                    const ctx = this.getContext();
+                    ctx.drawImage(img, this.getPosition().x, this.getPosition().y, width, height);
+                }
             };
         }
         catch(e)

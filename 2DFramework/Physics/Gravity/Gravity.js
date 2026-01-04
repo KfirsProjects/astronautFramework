@@ -1,10 +1,12 @@
 class Gravity {
-    //Gravity formula: F = m * g  ----- / 9.8
-    constructor(object={position:{x:0, y:0}, velocity:{x:0, y:0}}, gravityForce={x:0, y:9.8}, mass=1)
+    //Gravity formula: F = m * g  ----- / g =  9.8 in earth surface Newton's first law of motion
+    //Adding Newton's second law of motion: F = m * a  ----- / a = F / m ---> friction and air resistance adding now --> it called kenetic friction
+    constructor({object=[{position:{x:0, y:0}, velocity:{x:0, y:0}, gravityForce:{x:0, y:9.8}, mass:[], friction:{x:0, y:0},isComponentSymbolOn:false}]}={})
     {
         this.object = object;
-        this.gravityForce = gravityForce;
-        this.mass = mass;
+        this.gravityForce = object.gravityForce;
+        this.mass = object.mass;
+        this.friction = object.friction;
     }
 
     //love getters setters
@@ -35,25 +37,17 @@ class Gravity {
     applayGravity(){
         try
         {
-
-            //Validate data
-            if(typeof this.getMass() !== 'number' || this.getMass() <= 0 || isNaN(this.getMass()) || !isFinite(this.getMass()))
-            {
-                throw new Error("Invalid mass value");
-            }
-            if(typeof this.getGravityForce() !== 'object' || this.getGravityForce() === null || isNaN(this.getGravityForce().x) || isNaN(this.getGravityForce().y) || !isFinite(this.getGravityForce().x) || !isFinite(this.getGravityForce().y))
-            {
-                throw new Error("Invalid gravity force value");
-            }
-
+            //loop through all objects
+            this.object.forEach(object => {
             //Calculate the gravitational acceleration
-            let accelerationToEarthCenter = {x: this.getGravityForce().x / this.getMass(), y: this.getGravityForce().y / this.getMass()};
+            let accelerationToEarthCenter = {x: object.gravityForce.x * object.mass, y: object.gravityForce.y * object.mass};
             //Update the object's velocity and position
-            this.object.velocity.x += accelerationToEarthCenter.x;
-            this.object.velocity.y += accelerationToEarthCenter.y;
-            this.object.position.x += this.object.velocity.x;
-            this.object.position.y += this.object.velocity.y;
-            
+            object.velocity.x += accelerationToEarthCenter.x;
+            object.velocity.y += accelerationToEarthCenter.y;
+            //---> optional if acceleration should affect position directly
+            // this.object.position.x += this.object.velocity.x;
+            // this.object.position.y += this.object.velocity.y;
+            });
         }
         catch(e)
         {
@@ -61,4 +55,29 @@ class Gravity {
         }
     
     }
+
+    componentSymbol(context)
+    {
+        try
+        {
+            //Check if component symbol is on for each object
+            this.object.forEach(object => {
+                if(object.isComponentSymbolOn)
+                {
+                    //Apply component symbol logic here
+                    //Implementing component symbol to visualize gravity
+                    context.strokeStyle = "rgba(0, 0, 255, 0.5)"; // Blue color for gravity representation
+                    context.beginPath();
+                    context.arc(object.position.x, object.position.y, 5, 0, Math.PI * 2);
+                    context.stroke();
+                }
+            });
+        }
+        catch(e)
+        {
+            console.error("Error in component symbol method: " + e.message);
+        }
+    }
+
+
 }

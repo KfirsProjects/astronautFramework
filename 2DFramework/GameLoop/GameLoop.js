@@ -1,5 +1,7 @@
 class GameLoop
 {
+    //Game loop is the most impoprtant part of any game engine or framework it provide the main cycle that keeps the game running
+    //Game loop constructor
     constructor(callback, canvas ,canvasContext)
     {
         this.callback = callback;
