@@ -61,15 +61,30 @@ class Vector2{
     //calculate new position based on current velocity
     calculateNewPosition()
     {
-        this.position.x += this.velocity.x;
-        this.position.y += this.velocity.y;
-        return this;
+        try
+        {
+            this.position.x += this.velocity.x;
+            this.position.y += this.velocity.y;
+            return this;
+        }
+        catch(e)
+        {
+            console.error("Error in calculateNewPosition method: " + e.message);
+        }
     }
+
 
     //Debug method to print current state of the vector
     debug()
     {
-        console.log(`Position: x=${this.position.x}, y=${this.position.y} | Velocity: x=${this.velocity.x}, y=${this.velocity.y}`);
-        return this;
+        try
+        {
+            console.log(`Position: x=${this.position.x}, y=${this.position.y} | Velocity: x=${this.velocity.x}, y=${this.velocity.y}`);
+                return this;
+        }
+        catch(e)
+        {
+            console.error("Error in debug method: " + e.message);
+        }
     }
 }

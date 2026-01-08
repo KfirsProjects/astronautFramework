@@ -76,7 +76,8 @@ class Collision{
             const dx = otherObject.position.x - this.getObject().position.x;
             const dy = otherObject.position.y - this.getObject().position.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance < this.getDiameter() / 2 + otherObject.radius) {
+            if (distance < this.getDiameter() / 2 + otherObject.radius)
+            {
                 //Collision detected
                 //For more realistic collision response, you can implement physics calculations here
                 return true;
@@ -89,5 +90,4 @@ class Collision{
             return false;
         }
     }
-
 }
